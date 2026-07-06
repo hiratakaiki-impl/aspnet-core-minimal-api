@@ -12,6 +12,8 @@ builder.Services.AddOpenApiDocument(config =>
     config.Version = "v1";
 });
 
+builder.Services.AddProblemDetails();
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -25,6 +27,14 @@ if (app.Environment.IsDevelopment())
         config.DocExpansion = "list";
     });
 }
+
+app.UseExceptionHandler();
+app.UseStatusCodePages();
+
+app.MapGet("/exception", () =>
+{
+    throw new InvalidOperationException("Sample Exception");
+});
 
 RouteGroupBuilder todoItems = app.MapGroup("/todoitems");
 
