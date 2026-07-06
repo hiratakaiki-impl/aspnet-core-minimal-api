@@ -31,6 +31,10 @@ app.UseExceptionHandler(exceptionHandlerApp
         => await Results.Problem()
             .ExecuteAsync(context)));
 
+app.UseStatusCodePages(async statusCodeContext
+    => await Results.Problem(statusCode: statusCodeContext.HttpContext.Response.StatusCode)
+        .ExecuteAsync(statusCodeContext.HttpContext));
+
 app.MapGet("/exception", () =>
 {
     throw new InvalidOperationException("Sample Exception");
