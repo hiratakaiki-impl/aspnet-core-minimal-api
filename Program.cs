@@ -12,6 +12,8 @@ builder.Services.AddOpenApiDocument(config =>
     config.Version = "v1";
 });
 
+builder.Services.AddProblemDetails();
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -26,14 +28,8 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-app.UseExceptionHandler(exceptionHandlerApp
-    => exceptionHandlerApp.Run(async context
-        => await Results.Problem()
-            .ExecuteAsync(context)));
-
-app.UseStatusCodePages(async statusCodeContext
-    => await Results.Problem(statusCode: statusCodeContext.HttpContext.Response.StatusCode)
-        .ExecuteAsync(statusCodeContext.HttpContext));
+app.UseExceptionHandler();
+app.UseStatusCodePages();
 
 app.MapGet("/exception", () =>
 {
