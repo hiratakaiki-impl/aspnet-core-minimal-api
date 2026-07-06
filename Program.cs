@@ -26,6 +26,11 @@ if (app.Environment.IsDevelopment())
     });
 }
 
+app.UseExceptionHandler(exceptionHandlerApp
+    => exceptionHandlerApp.Run(async context
+        => await Results.Problem()
+            .ExecuteAsync(context)));
+
 app.MapGet("/exception", () =>
 {
     throw new InvalidOperationException("Sample Exception");
