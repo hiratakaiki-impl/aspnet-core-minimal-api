@@ -26,6 +26,11 @@ if (app.Environment.IsDevelopment())
     });
 }
 
+app.MapGet("/exception", () =>
+{
+    throw new InvalidOperationException("Sample Exception");
+});
+
 RouteGroupBuilder todoItems = app.MapGroup("/todoitems");
 
 todoItems.MapGet("/", GetAllTodos);
