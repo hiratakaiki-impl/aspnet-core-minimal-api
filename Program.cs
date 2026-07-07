@@ -15,6 +15,11 @@ builder.Services.AddOpenApiDocument(config =>
 builder.Services.AddProblemDetails();
 
 builder.Services.AddAuthentication().AddJwtBearer();
+builder.Services.AddAuthorizationBuilder()
+    .AddPolicy("admin_greetings", policy =>
+        policy
+            .RequireRole("admin")
+            .RequireClaim("scope", "greetings_api"));
 
 var app = builder.Build();
 
@@ -39,6 +44,9 @@ app.MapGet("/exception", () =>
 {
     throw new InvalidOperationException("Sample Exception");
 });
+
+app.MapGet("/hello", () => "Hello world!")
+    .RequireAuthorization("admin_greetings");
 
 RouteGroupBuilder todoItems = app.MapGroup("/todoitems");
 
