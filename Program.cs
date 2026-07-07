@@ -14,6 +14,8 @@ builder.Services.AddOpenApiDocument(config =>
 
 builder.Services.AddProblemDetails();
 
+builder.Services.AddAuthentication().AddJwtBearer();
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -30,6 +32,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseExceptionHandler();
 app.UseStatusCodePages();
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapGet("/exception", () =>
 {
