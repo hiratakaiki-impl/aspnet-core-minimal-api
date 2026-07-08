@@ -1,7 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddDbContext<TodoDb>(opt => opt.UseInMemoryDatabase("TodoList"));
+var connectionString = builder.Configuration.GetConnectionString("Todos") ?? "Host=localhost;Port=5432;Database=todo;Username=postgres;Password=mysecretpassword";
+
+builder.Services.AddDbContext<TodoDb>(opt => opt.UseNpgsql(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddEndpointsApiExplorer();
